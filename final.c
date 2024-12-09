@@ -1,3 +1,10 @@
+//cs135
+//josh chen
+//josh morris
+//chase grundy
+//final group project
+//due date:12/10/2024
+//this progamram takes a file and replaces N/V/A(nouns,verbs,adjectives) with user inputs
 #include<stdio.h>
 //prototype
 void scan(int *nouns, int *verbs, int *adjs, char madlib[]);
@@ -34,7 +41,6 @@ int main(){
 	if(adjs>0){
 	Ainputs(adjs,adjsA);
 	}
-	printf("%s",nounsA[0]);
 //and simply just replace all the N/V/A with user inputs from the 2d arrays
 	replaceNouns(nouns,nounsA,madlib,result,plsfix);
 	replaceVerbs(verbs,verbsA,plsfix,result);
