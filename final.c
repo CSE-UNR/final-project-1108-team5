@@ -4,16 +4,16 @@
 //chase grundy
 //final group project
 //due date:12/10/2024
-//this progamram takes a file and replaces N/V/A(nouns,verbs,adjectives) with user inputs
+//this progam takes a file and replaces N/V/A(nouns,verbs,adjectives) with user inputs
 #include<stdio.h>
+#define smol 100
+#define big 1000
 //prototype
 void scan(int *nouns, int *verbs, int *adjs, char madlib[]);
-void Ninputs(int nouns,char nounsA[][69]);
-void Vinputs(int verbs,char verbsA[][69]);
-void Ainputs(int adjs,char adjsA[][69]);
-void replaceNouns(int nouns,char nounsA[][69],char madlib[],char result[],char plsfix[]);
-void replaceVerbs(int verbs,char verbsA[][69],char plsfix[],char result[]);
-void replaceAdjs(int adjs, char adjsA[][69],char plsfix[],char result[]);
+void Uinputs(int nouns,int verbs, int adjs,char nounsA[][smol],char verbsA[][smol],char adjsA[][smol]);
+void replaceNouns(int nouns, char nounsA[][smol],char madlib[],char result[],char plsfix[]);
+void replaceVerbs(int verbs,char verbsA[][smol],char plsfix[],char result[]);
+void replaceAdjs(int adjs, char adjsA[][smol],char plsfix[],char result[]);
 int main(){
 //this is something i found as an issue with segmentation faults or whatever, cant get past it
 	printf("please dont use the capital letters of N, V, or A in the original madlib file or any of the prompts or else it ruins the whole thing\n");
@@ -21,26 +21,18 @@ int main(){
 //initiate integers to count how many nouns/verbs/adjectives there are in the file
 	int nouns = 0, verbs = 0, adjs = 0;
 //an array to store all  of the characters from the madlib txt file as a template and then another array to store the final result after changes
-	char madlib[6969] ={0};
-	char result[6969] ={0};
-	char plsfix[6969] ={0};
+	char madlib[big] ={0};
+	char result[big] ={0};
+	char plsfix[big] ={0};
 	result[6000] ='\0';//adding a terminate
 //scans the file and adds value to the according variables for every N,V or A in the file
 	scan(&nouns,&verbs,&adjs,madlib);
 //2d arrays initialized with eariler variables to determine size
-	char nounsA[nouns][69];
-	char verbsA[verbs][69];
-	char adjsA[adjs][69];
+	char nounsA[nouns][smol];
+	char verbsA[verbs][smol];
+	char adjsA[adjs][smol];
 //user inputs also if for some reason there arent any nouns/verbs/adjectives then it wont run the questions
-	if(nouns>0){
-	Ninputs(nouns,nounsA);
-	}
-	if(verbs>0){
-	Vinputs(verbs,verbsA);
-	}
-	if(adjs>0){
-	Ainputs(adjs,adjsA);
-	}
+	Uinputs(nouns,verbs,adjs, nounsA, verbsA, adjsA);
 //and simply just replace all the N/V/A with user inputs from the 2d arrays
 	replaceNouns(nouns,nounsA,madlib,result,plsfix);
 	replaceVerbs(verbs,verbsA,plsfix,result);
@@ -56,40 +48,42 @@ void scan(int *nouns, int *verbs, int *adjs, char madlib[]) {
 	int read;
 	int i = 0;
 	for(i =0;(read = fgetc(madlibb)) != EOF;){//reads the madlib file until the end
-	madlib[i++] = read; //stores the file into a string
+		madlib[i++] = read; //stores the file into a string
 	if(read == 'N'){
-	(*nouns)++;//if the letter N is detected it adds 1 to the int nouns
+		(*nouns)++;//if the letter N is detected it adds 1 to the int nouns
 	}else if(read == 'V'){ 
-	(*verbs)++; //sane with this but with verbs and V
+		(*verbs)++; //sane with this but with verbs and V
 	}else if (read == 'A'){
-	(*adjs)++;//and same with this
+		(*adjs)++;//and same with this
 	}
 	}
 	madlib[6000] = '\0';//adds a terminate thingy so i can use it in future functions
 	fclose(madlibb); 
 }
 //get inputs from the user
-void Ninputs(int nouns,char nounsA[][69]){
-	int p =0;
-	for(int i = 0; i < nouns;i++){//asks the user to input nouns until the nouns integer is reached
-	printf("Enter a noun: ");
-	scanf("%69s", nounsA[i]);
+void Uinputs(int nouns,int verbs,int adjs,char nounsA[][smol],char verbsA[][smol],char adjsA[][smol]){
+	
+	if(nouns>0){
+		for(int i = 0; i < nouns;i++){//asks the user to input nouns until the nouns integer is reached
+			printf("Enter a noun: ");
+			scanf("%69s", nounsA[i]);
+			}
 	}
-}
-void Vinputs(int verbs,char verbsA[][69]){
+	if(verbs>0){
 	for(int i = 0; i < verbs;i++){//same as nouns but with verbs
-	printf("Enter a verb: ");
-	scanf("%69s", verbsA[i]);
+		printf("Enter a verb: ");
+		scanf("%69s", verbsA[i]);
+		}
 	}
-}
-void Ainputs(int adjs,char adjsA[][69]){
+	if(adjs>0){
 	for(int i = 0; i < adjs;i++){//yea same thing
-	printf("Enter an adjective: ");
-	scanf("%69s", adjsA[i]);
+		printf("Enter an adjective: ");
+		scanf("%69s", adjsA[i]);
+		}
 	}
 }
 //append/replace nouns to the result array
-void replaceNouns(int nouns,char nounsA[][69],char madlib[],char result[], char plsfix[]){
+void replaceNouns(int nouns,char nounsA[][smol],char madlib[],char result[], char plsfix[]){
 	int row = 0;//this thing is for selecting the row of the nounsA array
 	int p =0;//just used for updating the result array
 	for(int i =0; madlib[i]!= '\0'; i++){
@@ -109,7 +103,7 @@ void replaceNouns(int nouns,char nounsA[][69],char madlib[],char result[], char 
 	}
 }
 //verbs (not gonna explain it but its the same as the nouns one)
-void replaceVerbs(int verbs,char verbsA[][69],char plsfix[],char result[]){
+void replaceVerbs(int verbs,char verbsA[][smol],char plsfix[],char result[]){
 	int row = 0;
 	int p =0;
 	for(int i =0;plsfix[i]!= '\0';i++){
@@ -129,7 +123,7 @@ void replaceVerbs(int verbs,char verbsA[][69],char plsfix[],char result[]){
 
 }
 //adjectives(not gonna explain it but its the same as the nouns one)
-void replaceAdjs(int adjs, char adjsA[][69],char plsfix[],char result[]){
+void replaceAdjs(int adjs, char adjsA[][smol],char plsfix[],char result[]){
 	int row = 0;
 	int p =0;
 	for(int i =0;plsfix[i]!= '\0';i++){
